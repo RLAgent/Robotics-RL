@@ -3,7 +3,7 @@
 ################################################################################
 
 * lilee_follower: Follows object inside the rectangle box published in
-  /location_data. (Modified version of turtlebot_follower)
+  /location_data. (See http://youtu.be/UYV0Y60JwEY)
 
 * lilee_gazebo: Spawns a turtlebot in gazebo.
 
@@ -12,7 +12,7 @@
 
 * lilee_tracker: Tracks an object whose color matches rgbhsv values in
   thresh.txt, and publishes a rectangle box surrounding that object (on the
-  camera screen) to /location_data.
+  camera screen) to /location_data. (See Robotics-RL/lilee_tracker.jpg)
 
 ################################################################################
 #  Launch instructions                                                         #
