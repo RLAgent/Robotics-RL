@@ -160,9 +160,6 @@ float getQValue(lilee_rl_discrete::State state, int action)
     }
     else
     {
-        /*float newVal = (rand() % 100)*-.01;
-        qValues.insert(std::pair<std::string, float>(key, newVal));
-        return newVal;*/
         qValues.insert(std::pair<std::string, float>(key, 0.0));
         return 0.0;
     }
@@ -246,7 +243,6 @@ void update()
 int getRandomAction()
 {   // Choose a random action.
     int action = rand() % actions::NUM_ACTIONS_;
-    //ROS_ERROR("\nagent, getRandomAction(): Chose %d\n", action);
     return action;
 }
 
@@ -279,9 +275,6 @@ int getPolicy(lilee_rl_discrete::State state)
         double random = rand() % actions.size();
         std::set<int>::iterator it = actions.begin();
         for (; random != 0; random--) it++;
-        
-        // DEBUG
-        //ROS_ERROR("\nagent, getPolicy():     Chose q(%d)=%f\n", *it, max);
       
         return *it;
     }
@@ -357,8 +350,6 @@ int getUserPolicy(lilee_rl_discrete::State state)
         std::set<int>::iterator it = actions.begin();
         for (; random != 0; random--) it++;
         
-        // DEBUG
-        //ROS_ERROR("\nagent, getUserPolicy(): Chose p(%d)=%f\n", *it, maxProb);
         return *it;
     }
     else
@@ -565,7 +556,6 @@ int main(int argc, char **argv)
 	    {
 	        //ROS_ERROR("agent: Call to environment failed!");
 	    }
-	    
 	    //ros::Duration(1).sleep();
 	}
 	

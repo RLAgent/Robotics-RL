@@ -75,9 +75,6 @@ int main(int argc, char** argv)
 
   boost::thread my_thread(boost::bind(&LileeTeleop::keyLoop, &Lilee_teleop));
   
-  
-  //ros::Timer timer = n.createTimer(ros::Duration(0.1), boost::bind(&LileeTeleop::watchdog, &Lilee_teleop));
-
   ros::spin();
 
   my_thread.interrupt() ;

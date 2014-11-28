@@ -21,7 +21,6 @@
 #include "geometry_msgs/Pose.h" // respawn
 #include <geometry_msgs/Twist.h> 
 #include <kobuki_msgs/BumperEvent.h> // bumper
-///#include <nav_msgs/Odometry.h>
 
 #include "lilee_rl_discrete/AgentEnvironment.h"
 #include "lilee_rl_discrete/State.h"
@@ -35,7 +34,6 @@ typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
  * Subscribes to point clouds from the 3dsensor, 
  * processes them, and publishes state messages.
  */
-
 class LileeEnvironment : public nodelet::Nodelet
 {
 public:
@@ -78,8 +76,6 @@ public:
     /** Agent's GPS location */
     ros::ServiceClient getmodelstate_;
    
-    
-    
    /*********************************************************
     * @brief OnInit method from node handle.
     * OnInit method from node handle. Sets up the parameters
@@ -88,8 +84,8 @@ public:
     virtual void onInit()
     {
         ROS_ERROR("envir: hello from onInit()");
-        ros::NodeHandle& nh = getMTNodeHandle();//getNodeHandle();
-        ros::NodeHandle& private_nh = getMTPrivateNodeHandle();//getPrivateNodeHandle();
+        ros::NodeHandle& nh = getMTNodeHandle();
+        ros::NodeHandle& private_nh = getMTPrivateNodeHandle();
 
         private_nh.getParam("min_y", min_y_);
         private_nh.getParam("max_y", max_y_);
@@ -127,7 +123,6 @@ public:
         rectanglesub_ = nh.subscribe<std_msgs::String>("/location_data", 1, &LileeEnvironment::rectanglecb, this);
         goaldepthsub_ = nh.subscribe("/camera/depth/image_raw", 1, &LileeEnvironment::goaldepthcb, this);
         bumpersub_ = nh.subscribe("/mobile_base/events/bumper", 1, &LileeEnvironment::bumpercb, this);
-        //odomsub_ = nh.subscribe("/odom", 1, &LileeEnvironment::odomcb, this);
         
         respawn_goal();
         respawn_agent();
@@ -144,14 +139,13 @@ public:
         modelstate.reference_frame = "world";
         
         geometry_msgs::Pose pose;
-	    pose.position.x = 2;//rand() % WORLD_BOUND_;//rand() % (2*WORLD_BOUND_) - WORLD_BOUND_;
-	    pose.position.y = 2;//rand() % WORLD_BOUND_;//rand() % (2*WORLD_BOUND_) - WORLD_BOUND_;
+	    pose.position.x = rand() % (2*WORLD_BOUND_) - WORLD_BOUND_;
+	    pose.position.y = rand() % (2*WORLD_BOUND_) - WORLD_BOUND_;
 	    pose.position.z = 0;
 	    pose. orientation.w = 1.0; pose.orientation.x = pose.orientation.y = pose.orientation.z = 0;
         modelstate.pose = pose;
         
         respawnerpub_.publish(modelstate);
-        //ROS_ERROR("envir: Respawned goal to (%f, %f, %f).", pose.position.x, pose.position.y, pose.position.z);
     }
     void respawn_agent()
     {   // Respawn agent model to (0,0,0) on the map.
@@ -160,14 +154,11 @@ public:
         modelstate.reference_frame = "world";
         
         geometry_msgs::Pose pose;
-	    //pose.position.x = AGENT_INIT_POS_X; pose.position.y = AGENT_INIT_POS_Y; pose.position.z = 0; pose.orientation.w = 1; pose.orientation.z = pose.orientation.x = pose.orientation.y = 0;
 	    pose.position.x=(rand() % WORLD_BOUND_); pose.position.y=(rand() % WORLD_BOUND_); pose.position.z = 0; pose.orientation.w = (rand() % 200)*(.01)-1; pose.orientation.z = (rand() % 200)*(.01)-1;pose.orientation.x = pose.orientation.y = 0;
 	    
         modelstate.pose = pose;
         
         respawnerpub_.publish(modelstate);
-        //ROS_ERROR("envir: Respawned agent");
-        
         
         stepCnt = 0;
         episodeNum++;
@@ -190,22 +181,6 @@ public:
                 break;
             case actions::STOP_:
                 cmdpub_.publish(actions::stop());
-            /*case FORWARD_LEFT_:
-                move_forwardleft();
-                break;
-            case FORWARD_RIGHT_:
-                move_forwardright();
-                break;
-            case BACKWARD_:
-                move_backward();
-                break;
-            case BACKWARD_LEFT_:
-                move_backwardleft();
-                break;
-            case BACKWARD_RIGHT_:
-                move_backwardright();
-                break;
-                */
         }
         //ros::Duration(actions::ACTION_DURATION_).sleep();
         stepCnt++;
@@ -246,7 +221,6 @@ public:
         }
         else
         {
-            //return -1*state.distance_to_goal;
             res.reward = -1.0;
             res.state = state_;
         }
@@ -340,52 +314,12 @@ public:
         }
     }
     
-    /*void agentPositionCb() // Agent's GPS Location
-    {
-        gazebo_msgs::GetModelState agentl;
-        agent.request.model_name = agent_model_name;
-        
-        if (!odomFlag)
-        {
-            if (getmodelstate_.call(agent))
-            {
-                odomFlag = true;
-                state_.agent_location.position_x = floor(agent.response.pose.position.x * APPROX_ORDER_ + 0.5);
-                state_.agent_location.position_y = floor(agent.response.pose.position.y * APPROX_ORDER_ + 0.5);
-                
-                double roll, pitch, yaw;
-                tf::Quaternion q(agent.response.pose.orientation.x,
-                    agent.response.pose.orientation.y,
-                    agent.response.pose.orientation.z,
-                    agent.response.pose.orientation.w);
-                tf::Matrix3x3(q).getRPY(roll, pitch, yaw);
-                state_.agent_location.orientation_yaw = floor(yaw + 0.5);
-            }
-        }
-    }*/
-    
     void bumpercb(const kobuki_msgs::BumperEvent::ConstPtr& msg)
     {
         state_.bumper.bumper = msg->bumper;
         state_.bumper.state = msg->state;
-        
-        //if (state_.bumper.state)
-           // ros::Duration(0.5).sleep();
     }
-   
     
-    /*
-    void odomcb(const nav_msgs::Odometry::ConstPtr& msg)
-    {
-        if (!odomFlag)
-        {
-            odomFlag = true;
-            
-            state_.agent_location.position_x = floor((msg->pose).pose.position.x+0.5);
-            state_.agent_location.position_y = floor((msg->pose).pose.position.y+0.5);
-            state_.agent_location.orientation_w = floor((msg->pose).pose.orientation.w+0.5);
-        }
-    }*/
   /*!*******************************************************
    * @brief Process image data and publish location of object.
    *********************************************************/
@@ -442,8 +376,6 @@ public:
     //Callback for /camera/depth/image.
     void goaldepthcb(const sensor_msgs::ImageConstPtr& msg)
      {
-        // TODO: DEBUG
-        //ROS_ERROR("goaldepthcb! goaldepthFlag = %d", goaldepthFlag);
         
         // TODO: Put this in separate callback
         agentPositionCb(); // Agent's GPS location
