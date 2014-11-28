@@ -12,7 +12,7 @@
 
 * lilee_tracker: Tracks an object whose color matches rgbhsv values in
   thresh.txt, and publishes a rectangle box surrounding that object (on the
-  camera screen) to /location_data. (See Robotics-RL/lilee_tracker.jpg)
+  camera screen) to /location_data. (See lilee_tracker/lilee_tracker.jpg)
 
 ################################################################################
 #  Launch instructions                                                         #
