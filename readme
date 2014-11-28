@@ -10,6 +10,9 @@
 * lilee_rl_continuous: Simulates policy gradient (PG) learning and PG-ELLA in
   gazebo. The state and action spaces are continuous.
 
+* lilee_rl_discrete: Simulates Q-Learning in gazebo. The state and action
+  spaces are discrete.
+
 * lilee_tracker: Tracks an object whose color matches rgbhsv values in
   thresh.txt, and publishes a rectangle box surrounding that object (on the
   camera screen) to /location_data. (See lilee_tracker/lilee_tracker.jpg)
