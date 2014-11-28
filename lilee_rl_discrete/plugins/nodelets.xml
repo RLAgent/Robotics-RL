@@ -1,0 +1,7 @@
+<library path="lib/liblilee_rl_discrete">
+  <class name="lilee_rl_discrete/LileeEnvironment" type="lilee_rl_discrete::LileeEnvironment" base_class_type="nodelet::Nodelet">
+    <description>
+      The turtlebot people reinforcement node.
+    </description>
+  </class>
+</library> 
