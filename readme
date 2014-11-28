@@ -1,0 +1,96 @@
+################################################################################
+#  List of ROS packages                                                        #
+################################################################################
+
+* lilee_rl_continuous: Simulates policy gradient (PG) learning and PG-ELLA in
+  gazebo. The state and action spaces are continuous.
+
+* lilee_gazebo: Spawns a turtlebot in gazebo.
+
+* lilee_follower: Follows object inside the rectangle box published in
+  /location_data. (Modified version of turtlebot_follower)
+
+* lilee_tracker: Tracks an object whose color matches rgbhsv values in
+  thresh.txt, and publishes a rectangle box surrounding that object (on the
+  camera screen) to /location_data.
+
+################################################################################
+#  Launch instructions                                                         #
+################################################################################
+
+* Q-Learning (gazebo)
+  1. roslaunch lilee_gazebo launch_maze_qlearning.launch
+  2. roslaunch lilee_rl_discrete qlearning.launch
+
+* PG (gazebo)
+  1. roslaunch lilee_gazebo launch_maze_pg.launch
+  2. In MATLAB:
+    i.  Add LifelongRL-Robotics/lilee/MATLAB to path
+    ii. Run pg_startup
+  3. roslaunch lilee_rl_continuous pg.launch
+
+* PG-ELLA (gazebo)
+  1. roslaunch lilee_gazebo launch_maze_pg.launch
+  2. In MATLAB:
+    i.  Add LifelongRL-Robotics/lilee/MATLAB to path
+    ii. Run pg_ella_startup
+  3. roslaunch lilee_rl_continuous pg-ella.launch
+
+* Edit maze.world:
+  - For Q-learning:
+    1. roslaunch lilee_gazebo edit_maze_qlearning.launch
+    2. Modify the world in gazebo
+    3. "Save As..." lilee_gazebo/worlds/maze_qlearning.world
+  - For PG/PG-ELLA:
+    1. roslaunch lilee_gazebo edit_maze_pg.launch
+    2. Modify the world in gazebo
+    3. "Save As..." lilee_gazebo/worlds/maze_pg.world
+
+* color-follower (gazebo)
+  1. roslaunch lilee_gazebo turtlebot_maze.launch
+  2. rosrun lilee_tracker tracker.py
+  3. rosrun lilee_reinforcement agent
+  4. roslaunch lilee_follower follower.launch
+  5. rosrun lilee_reinforcement environment
+
+* color-follower (turtlebot)
+  1. roslaunch turtlebot_bringup minimal.launch
+  2. roslaunch lilee_follower follower.launch
+  3. rosrun lilee_tracker tracker.py
+
+################################################################################
+#  Usage instructions                                                          #
+################################################################################
+
+* How to use the reinforcement packages:
+  1. Press Down arrow to turn user control ON/OFF. Default is OFF.
+  2. When user control is ON, use Up/Right/Left arrows to choose actions for
+     the agent (turtlebot).
+
+* To close PG/PG-ELLA
+  1. ^C in terminal to kill lilee_gazebo and lilee_rl_continuous
+  2. Type `clear' in MATLAB
+
+################################################################################
+#  Installation instructions                                                   #
+################################################################################
+
+* ROS I/O Package (MATLAB support for ROS): 
+  1. Download ROS I/O Package from mathworks.com/ros
+  2. sudo apt-get install ia32-libs
+  3. Double-click ROSIOPackage-R2014a_v0.1.6.2_XXXXX-Install to launch the
+     installer. 
+
+* PG-ELLA 
+  - Policy Gradient Toolbox: ias.tu-darmstadt.de/Research/PolicyGradientToolbox
+  - ELLA code: http://www.seas.upenn.edu/~eeaton/publications.html#Software
+
+################################################################################
+#  Stored files                                                                #
+################################################################################
+
+* Q-Value stored files
+  - The agent's Q-Value table is saved in ~/.ros/saved_qValue.
+  - The agent's User Policy table is saved in ~/.ros/saved_userPolicy.
+
+

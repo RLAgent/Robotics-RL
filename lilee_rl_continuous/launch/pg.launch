@@ -1,0 +1,41 @@
+<!--
+    The lilee_rl_continuous nodelet.
+-->
+<launch>
+    
+    
+ <node pkg="nodelet" type="nodelet" name="image_proc_nodelet" args="manager"/>
+ <include file="$(find image_proc)/launch/image_proc.launch" ns="/camera/rgb">
+   <arg name="manager" value="/image_proc_nodelet"/>
+ </include>
+
+ <node pkg="nodelet" type="nodelet" name="depth_image_proc"
+args="standalone depth_image_proc/convert_metric">
+<remap from="image_raw" to="/camera/depth/image_raw"/>
+<remap from="image" to="/camera/depth/image"/>
+ </node>
+ 
+  <include file="$(find lilee_rl_continuous)/launch/includes/velocity_smoother.launch.xml"/>
+
+  <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
+
+  <!--  Load turtlebot reinforcement into the 3d sensors nodelet manager to avoid pointcloud serializing -->
+  <node pkg="nodelet" type="nodelet" name="lilee_rl_continuous"
+	args="load lilee_rl_continuous/LileeEnvironment /image_proc_nodelet">
+    <remap from="lilee_rl_continuous/cmd_vel" to="velocity_smoother/raw_cmd_vel"/>
+    <remap from="depth/points" to="camera/depth/points"/>
+    <param name="enabled" value="true" />
+    <param name="x_scale" value="7.0" />
+    <param name="z_scale" value="2.0" />
+    <param name="min_x" value="-2.0" />
+    <param name="max_x" value="2.0" />
+    <param name="min_y" value="-0.5" />
+    <param name="max_y" value="1" />
+    <param name="max_z" value="20" />
+    <param name="goal_z" value="0.4" />
+  </node>
+  
+  <node pkg="lilee_tracker" type="tracker.py" name="lilee_tracker"></node>
+  <node pkg="lilee_rl_continuous" type="continuousTeleop" name="lilee_teleop"></node>
+  <node pkg="lilee_rl_continuous" type="agent_pg" name="lilee_rl_continuous_agent"></node>
+</launch>

@@ -1,0 +1,7 @@
+rostopic pub -r 20 /gazebo/set_model_state gazebo_msgs/ModelState '{model_name: fire_hydrant, pose: { position: { x: 0, y: 0, z: 0 }, orientation: {x: 0, y: 0, z: 0, w: 1 } }, twist: { linear: { x: 0, y: 0, z: 0 }, angular: { x: 0, y: 0, z: 0}  }, reference_frame: world }'
+
+
+rosservice call /gazebo/get_model_state '{model_name: fire_hydrant}'
+rosservice call /gazebo/get_model_state '{model_name: mobile_base}'
+
+

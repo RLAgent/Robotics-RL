@@ -1,0 +1,7 @@
+lilee_rl_continuous/GoalLocation goal
+lilee_rl_continuous/AgentLocation agent_location
+kobuki_msgs/BumperEvent bumper
+float32 distance_to_goal
+float32 theta_to_goal
+bool isTerminal
+bool success
