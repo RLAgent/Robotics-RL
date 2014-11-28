@@ -1,9 +1,21 @@
 ################################################################################
+#  About                                                                       #
+################################################################################
+
+Author: Lisa Lee
+Advisor/mentors: Dr. Eric Eaton, Dr. Haitham Bou Ammar, Christopher Clingerman
+
+This work was supported by the National Science Foundation REU Site at the
+GRASP Laboratory in the University of Pennsylvania.
+
+My research paper can be found at princeton.edu/~lilee/reu_paper.pdf
+
+################################################################################
 #  List of ROS packages                                                        #
 ################################################################################
 
 * lilee_follower: Follows object inside the rectangle box published in
-  /location_data. (See http://youtu.be/bV7wMxJ8f7s)
+  /location_data. (See https://youtu.be/bV7wMxJ8f7s)
 
 * lilee_gazebo: Spawns a turtlebot in gazebo.
 
